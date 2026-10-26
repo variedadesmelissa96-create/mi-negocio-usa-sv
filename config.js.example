@@ -1,0 +1,7 @@
+// Copia este archivo como config.js cuando tengas creado tu proyecto Supabase.
+// Usa SOLO la URL del proyecto y la clave publishable/anon pública.
+// Nunca pongas aquí la service_role key ni contraseñas.
+window.APP_CONFIG = {
+  SUPABASE_URL: "PEGA_AQUI_LA_URL_DE_TU_PROYECTO",
+  SUPABASE_ANON_KEY: "PEGA_AQUI_TU_CLAVE_PUBLICA"
+};

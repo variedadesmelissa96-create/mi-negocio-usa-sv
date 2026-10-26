@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi Inventario USA</title>
+<style>
+:root {
+ --site-primary: #285c4d;
+ --site-secondary: #f1c27d;
+ --site-background: #f7f5ef;
+ --site-on-primary: #ffffff;
+ --site-on-secondary: #342719;
+ --site-on-background: #202b26;
+ --site-font-body: "Trebuchet MS", Arial, sans-serif;
+ --site-font-heading: Georgia, "Times New Roman", serif;
+ --site-heading-scale: 1;
+ --site-spacing-scale: 1;
+ --site-radius-scale: 1;
+ --site-decoration-opacity: 1;
+ color-scheme: light dark;
+}
+* { box-sizing: border-box; }
+body { margin:0; font-family:var(--site-font-body); background:light-dark(#f7f5ef,#171d1a); color:light-dark(#202b26,#eef3ef); }
+#app { min-height:100vh; background-color:light-dark(var(--site-background),#171d1a); color:light-dark(var(--site-on-background),#eef3ef); border-radius:0; }
+header { background:var(--site-primary); color:var(--site-on-primary); padding:calc(30px * var(--site-spacing-scale)) clamp(18px,5vw,64px) 36px; position:relative; overflow:hidden; }
+header:after { content:""; position:absolute; width:260px;height:260px;border:1px solid #ffffff2c;border-radius:50%;right:-65px;top:-100px;box-shadow:0 0 0 28px #ffffff0d,0 0 0 58px #ffffff0a;opacity:var(--site-decoration-opacity);pointer-events:none; }
+.topline { display:flex; align-items:center; justify-content:space-between; gap:12px; max-width:1100px; margin:auto; }
+.brand { font-size:13px; letter-spacing:2px; font-weight:800; text-transform:uppercase; }
+.pill { background:#ffffff20; padding:8px 12px; border-radius:999px; font-size:12px; }
+.hero { max-width:1100px; margin:42px auto 0; position:relative; z-index:1; }
+.eyebrow { color:#f5d7a8; text-transform:uppercase; letter-spacing:2px; font-size:11px; font-weight:800; }
+h1,h2,h3,p { margin-top:0; }
+h1 { font: bold calc(clamp(34px,6vw,58px) * var(--site-heading-scale))/1.04 var(--site-font-heading); max-width:650px; margin:14px 0; }
+.hero p { color:#e0eee7; max-width:540px; line-height:1.65; margin-bottom:22px; }
+.btn { border:0; border-radius:calc(12px * var(--site-radius-scale)); padding:12px 16px; font-weight:800; cursor:pointer; font:inherit; font-size:13px; }
+.btn.gold { background:var(--site-secondary); color:var(--site-on-secondary); }
+.btn.ghost { background:transparent; color:inherit; border:1px solid #ffffff66; }
+.btn.excel { background:#1f7548; color:#fff; }
+.reportbuttons { display:flex; gap:8px; flex-wrap:wrap; }
+main { max-width:1100px; margin:auto; padding:28px clamp(14px,4vw,38px) 50px; }
+.stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:-2px; }
+.stat,.panel { background:light-dark(#fff,#222b26); border:1px solid light-dark(#e8e5dc,#354139); border-radius:calc(18px * var(--site-radius-scale)); padding:18px; box-shadow:0 5px 18px #14271b08; }
+.stat .label { font-size:12px; color:light-dark(#6d7972,#b4c1b8); margin-bottom:10px; }
+.stat .num { font: bold 26px var(--site-font-heading); }
+.stat .symbol { float:right; background:#e8f1e9; color:#285c4d; width:32px;height:32px;display:grid;place-items:center;border-radius:10px; }
+.sectionhead { display:flex; justify-content:space-between; align-items:end; gap:12px; margin:30px 0 14px; }
+h2 { font: bold 27px var(--site-font-heading); margin:0 0 5px; }
+.sub { color:light-dark(#758078,#b4c1b8); font-size:13px; margin:0; }
+.contentgrid { display:grid; grid-template-columns:1.15fr .85fr; gap:16px; align-items:start; }
+.panel h3 { font: bold 20px var(--site-font-heading); margin-bottom:5px; }
+.panel .intro { color:light-dark(#758078,#b4c1b8); font-size:12px; margin-bottom:20px; }
+form { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.field { display:flex; flex-direction:column; gap:6px; }
+.field.full { grid-column:1/-1; }
+label { font-size:12px; font-weight:800; color:light-dark(#59665e,#c3d0c7); }
+input,select { width:100%; padding:12px; border:1px solid light-dark(#dfe5dd,#455249); border-radius:10px; background:light-dark(#fbfcf9,#18211c); color:inherit; font:inherit; font-size:14px; min-width:0; }
+input:focus,select:focus { outline:2px solid #8eb8a1; border-color:transparent; }
+.submit { grid-column:1/-1; background:var(--site-primary); color:white; margin-top:4px; }
+.profitbox { background:light-dark(#f2f6ef,#29352d); border-radius:12px; padding:14px; margin-top:15px; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.profitbox strong { color:light-dark(#285c4d,#b7e0c2); font-size:20px; }
+.listtools { display:flex; gap:8px; margin:14px 0; }
+.listtools input { flex:1; }
+.tablewrap { overflow:auto; }
+table { width:100%; border-collapse:collapse; font-size:13px; min-width:520px; }
+th { text-align:left; color:light-dark(#748078,#b8c5bc); font-size:11px; text-transform:uppercase; letter-spacing:.6px; padding:12px 8px; border-bottom:1px solid light-dark(#e8e5dc,#354139); }
+td { padding:13px 8px; border-bottom:1px solid light-dark(#eeece5,#303b33); vertical-align:middle; }
+.productname { font-weight:800; }
+.muted { color:light-dark(#7a867e,#aab8ae); font-size:11px; margin-top:4px; }
+.status { display:inline-block; font-size:10px; font-weight:800; padding:6px 8px; border-radius:999px; background:#f8e8c9;color:#825d1d; }
+.status.sold { background:#dceee0;color:#24643c; }
+.status.stock { background:#e2e8f7;color:#354f89; }
+.smallbtn { border:1px solid light-dark(#e0e5dd,#46544a); background:transparent; color:inherit; border-radius:8px; padding:7px 9px; cursor:pointer; font-size:11px; }
+.empty { text-align:center; padding:30px; color:light-dark(#77847b,#aab8ae); }
+.tip { background:var(--site-secondary); color:var(--site-on-secondary); border-radius:calc(18px * var(--site-radius-scale)); padding:20px; margin-top:18px; }
+.tip h3 { font: bold 20px var(--site-font-heading); margin-bottom:8px; }
+.tip p { font-size:13px; line-height:1.6; margin:0; }
+footer { text-align:center; padding:24px; color:light-dark(#77847b,#aab8ae); font-size:11px; }
+.toast { position:fixed; bottom:18px; left:50%; transform:translateX(-50%); background:#202b26; color:white; padding:12px 18px; border-radius:12px; box-shadow:0 6px 28px #0003; z-index:5; font-size:13px; display:none; }
+@media(max-width:720px) { .stats { grid-template-columns:repeat(2,minmax(0,1fr)); } .contentgrid { grid-template-columns:1fr; } .hero { margin-top:32px; } .sectionhead { align-items:start; flex-direction:column; } }
+@media(max-width:420px) { form { grid-template-columns:1fr; } .field.full,.submit { grid-column:auto; } .stat { padding:14px; } .stat .num { font-size:22px; } }
+@media(prefers-color-scheme:dark) { .stat .symbol { background:#314b3a; color:#c8ead1; } }
+</style>
+</head>
+<body>
+<div id="app" data-sites-preview-theme="custom">
+<header>
+ <div class="topline"><div class="brand">✦ MI NEGOCIO · USA → SV</div><div class="pill">Tu control, tu crecimiento</div></div>
+ <div class="hero">
+  <div class="eyebrow">Organiza · Vende · Gana</div>
+  <h1>De cada paquete,<br>una oportunidad.</h1>
+  <p>Administra lo que te mandan de Estados Unidos, controla tu inventario y descubre cuánto ganas con cada venta. Todo en un solo lugar.</p>
+  <button class="btn gold" onclick="document.getElementById('nombre').focus()">＋ Registrar producto</button>
+  <button class="btn ghost" onclick="document.getElementById('inventario').scrollIntoView({behavior:'smooth'})">Ver inventario ↓</button>
+ </div>
+</header>
+<main>
+ <section class="stats" aria-label="Resumen del negocio">
+  <div class="stat"><div class="symbol">📦</div><div class="label">Productos registrados</div><div class="num" id="total">0</div></div>
+  <div class="stat"><div class="symbol">🛍️</div><div class="label">Unidades disponibles</div><div class="num" id="stock">0</div></div>
+  <div class="stat"><div class="symbol">💵</div><div class="label">Valor de inventario</div><div class="num" id="valor">$0.00</div></div>
+  <div class="stat"><div class="symbol">✨</div><div class="label">Ganancia realizada</div><div class="num" id="ganancia">$0.00</div></div>
+ </section>
+ <div class="sectionhead"><div><h2>Tu inventario</h2><p class="sub">Registra cada artículo que llega y mantenlo bajo control.</p></div><div class="reportbuttons"><button class="btn excel" onclick="exportarExcel()">▦ Reporte del inventario en Excel</button><button class="btn ghost" style="color:inherit;border-color:#aab5ac" onclick="exportar()">⇩ Exportar CSV</button></div></div>
+ <section class="contentgrid">
+  <div class="panel">
+   <h3>Agregar producto</h3><p class="intro">Anota los costos y calcula el precio que te conviene.</p>
+   <form id="formulario">
+    <div class="field full"><label for="nombre">Nombre del producto *</label><input id="nombre" required placeholder="Ej. Tenis, vitaminas, ropa..."></div>
+    <div class="field"><label for="categoria">Categoría</label><select id="categoria"><option>Ropa</option><option>Calzado</option><option>Vitaminas</option><option>Perfumes</option><option>Accesorios</option><option>Electrónica</option><option>Hogar</option><option>Otros</option></select></div>
+    <div class="field"><label for="cantidad">Cantidad recibida *</label><input id="cantidad" type="number" min="1" step="1" value="1" required></div>
+    <div class="field"><label for="costo">Costo total ($) *</label><input id="costo" type="number" min="0" step=".01" placeholder="Ej. 25.00" required></div>
+    <div class="field"><label for="extra">Envío / otros ($)</label><input id="extra" type="number" min="0" step=".01" value="0"></div>
+    <div class="field full"><label for="precio">Precio de venta por unidad ($) *</label><input id="precio" type="number" min="0" step=".01" placeholder="Ej. 12.00" required></div>
+    <div class="field full"><label for="lote">Paquete / fecha / nota</label><input id="lote" placeholder="Ej. Caja octubre, pedido de mamá"></div>
+    <div class="field full"><div class="profitbox"><div><div class="muted">Ganancia estimada por unidad</div><strong id="estimada">$0.00</strong></div><div style="text-align:right"><div class="muted">Ganancia estimada total</div><strong id="estimadaTotal">$0.00</strong></div></div></div>
+    <button class="btn submit" type="submit">＋ Guardar en inventario</button>
+   </form>
+  </div>
+  <div>
+   <div class="panel" id="inventario">
+    <h3>Artículos registrados</h3><p class="intro">Busca, marca ventas y revisa lo que te queda.</p>
+    <div class="listtools"><input id="buscar" aria-label="Buscar producto" placeholder="⌕ Buscar producto..."><select id="filtro" aria-label="Filtrar inventario"><option value="todos">Todos</option><option value="stock">En existencia</option><option value="agotado">Agotados</option></select></div>
+    <div class="tablewrap"><table><thead><tr><th>Producto</th><th>Precio</th><th>Stock</th><th>Estado / acción</th></tr></thead><tbody id="filas"></tbody></table></div>
+    <div id="vacio" class="empty">📦<br><strong>Tu inventario empieza aquí</strong><br><span class="muted">Agrega tu primer producto en el formulario.</span></div>
+   </div>
+   <div class="tip"><h3>💡 Consejo de negocio</h3><p>No confundas ventas con ganancias. Suma el costo del artículo, la parte del envío y cualquier gasto extra antes de poner tu precio. Así sabrás cuánto dinero realmente te queda.</p></div>
+  </div>
+ </section>
+ <footer>Mi Negocio USA → SV · Hecho para ayudarte a crecer con orden ✨<br>Versión inicial: los datos se guardan en este navegador. La conexión a Supabase se configura en el siguiente paso.</footer>
+</main>
+<div class="toast" id="toast" role="status"></div>
+</div>
+<script>
+const KEY='mi-negocio-usa-sv-v1';
+let productos=[];
+try { productos=JSON.parse(localStorage.getItem(KEY)||'[]'); if(!Array.isArray(productos)) productos=[]; } catch(e) { productos=[]; }
+const $=id=>document.getElementById(id);
+const dinero=n=>'$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const numero=id=>Math.max(0,Number($(id).value)||0);
+function guardar(){try{localStorage.setItem(KEY,JSON.stringify(productos));}catch(e){}}
+function avisar(s){const t=$('toast');t.textContent=s;t.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.style.display='none',2400);}
+function estimar(){const q=numero('cantidad')||1,c=(numero('costo')+numero('extra'))/q,p=numero('precio');$('estimada').textContent=dinero(p-c);$('estimadaTotal').textContent=dinero((p-c)*q);}
+['cantidad','costo','extra','precio'].forEach(id=>$(id).addEventListener('input',estimar));
+$('formulario').addEventListener('submit',e=>{e.preventDefault();const q=numero('cantidad'),c=numero('costo'),x=numero('extra'),p=numero('precio');if(!q||!$('nombre').value.trim()){avisar('Revisa el nombre y la cantidad.');return;}productos.unshift({id:Date.now(),nombre:$('nombre').value.trim(),categoria:$('categoria').value,cantidad:q,stock:q,costo:c,extra:x,precio:p,lote:$('lote').value.trim(),vendidas:0,ganancia:0});guardar();render();e.target.reset();$('cantidad').value=1;$('extra').value=0;estimar();avisar('¡Producto agregado a tu inventario!');});
+function vender(id){const p=productos.find(p=>p.id===id);if(!p||p.stock<1){avisar('Este producto está agotado.');return;}p.stock--;p.vendidas++;p.ganancia+=p.precio-(p.costo+p.extra)/(p.cantidad||1);guardar();render();avisar('¡Venta registrada! Ganancia: '+dinero(p.precio-(p.costo+p.extra)/(p.cantidad||1)));}
+function borrar(id){if(!confirm('¿Quieres eliminar este producto del inventario?'))return;productos=productos.filter(p=>p.id!==id);guardar();render();avisar('Producto eliminado.');}
+function render(){const q=$('buscar').value.toLowerCase(),f=$('filtro').value;const lista=productos.filter(p=>p.nombre.toLowerCase().includes(q)||p.categoria.toLowerCase().includes(q)).filter(p=>f==='todos'||(f==='stock'?p.stock>0:p.stock===0));$('total').textContent=productos.length;$('stock').textContent=productos.reduce((a,p)=>a+p.stock,0);$('valor').textContent=dinero(productos.reduce((a,p)=>a+p.stock*((p.costo+p.extra)/(p.cantidad||1)),0));$('ganancia').textContent=dinero(productos.reduce((a,p)=>a+p.ganancia,0));$('filas').innerHTML=lista.map(p=>`<tr><td><div class="productname">${esc(p.nombre)}</div><div class="muted">${esc(p.categoria)}${p.lote?' · '+esc(p.lote):''}</div></td><td>${dinero(p.precio)}<div class="muted">costo/u ${dinero((p.costo+p.extra)/(p.cantidad||1))}</div></td><td><strong>${p.stock}</strong><div class="muted">${p.vendidas} vend.</div></td><td><span class="status ${p.stock===0?'sold':p.stock<3?'':'stock'}">${p.stock===0?'Agotado':p.stock<3?'Pocas unidades':'Disponible'}</span><div style="display:flex;gap:5px;margin-top:7px"><button class="smallbtn" onclick="vender(${p.id})" ${p.stock===0?'disabled':''}>＋ Venta</button><button class="smallbtn" onclick="borrar(${p.id})" aria-label="Eliminar ${esc(p.nombre)}">×</button></div></td></tr>`).join('');$('vacio').style.display=lista.length?'none':'block';}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+$('buscar').addEventListener('input',render);$('filtro').addEventListener('change',render);
+function exportarExcel(){
+ const filas=[['REPORTE DEL INVENTARIO · MI NEGOCIO USA → SV'],['Fecha de reporte',new Date().toLocaleDateString('es-SV')],[],['Producto','Categoría','Cantidad inicial','Stock actual','Unidades vendidas','Costo total ($)','Envío / otros ($)','Costo por unidad ($)','Precio de venta ($)','Ganancia realizada ($)','Paquete / nota']];
+ productos.forEach(p=>filas.push([p.nombre,p.categoria,p.cantidad,p.stock,p.vendidas,p.costo,p.extra,(p.costo+p.extra)/(p.cantidad||1),p.precio,p.ganancia,p.lote||'']));
+ filas.push([],['RESUMEN'],['Productos registrados',productos.length],['Unidades disponibles',productos.reduce((a,p)=>a+p.stock,0)],['Valor del inventario ($)',productos.reduce((a,p)=>a+p.stock*((p.costo+p.extra)/(p.cantidad||1)),0)],['Unidades vendidas',productos.reduce((a,p)=>a+p.vendidas,0)],['Ganancia realizada ($)',productos.reduce((a,p)=>a+p.ganancia,0)]);
+ const cell=v=>'<td style="border:1px solid #cbd5ce;padding:7px; mso-number-format:\'\@\';">'+String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')+'</td>';
+ const html='<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><table>'+filas.map((r,i)=>'<tr>'+r.map(v=>cell(v)).join('')+'</tr>').join('')+'</table></body></html>';
+ const blob=new Blob(['\ufeff',html],{type:'application/vnd.ms-excel;charset=utf-8;'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='reporte-inventario-usa.xls';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);avisar('¡Reporte de inventario descargado para abrir en Excel!');
+}
+function exportar(){const cab=['Producto','Categoria','Cantidad inicial','Stock actual','Vendidas','Costo total USD','Otros gastos USD','Precio venta unidad USD','Ganancia realizada USD','Paquete o nota'];const filas=productos.map(p=>[p.nombre,p.categoria,p.cantidad,p.stock,p.vendidas,p.costo,p.extra,p.precio,p.ganancia,p.lote]);const csv=[cab,...filas].map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mi-inventario-usa.csv';a.click();URL.revokeObjectURL(a.href);avisar('Copia del inventario descargada.');}
+render();estimar();
+</script>
+</body>
+</html>
